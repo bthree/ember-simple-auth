@@ -104,12 +104,13 @@ export default BaseAuthenticator.extend({
     @return {Ember.RSVP.Promise} A promise that when it resolves results in the session becoming authenticated
     @public
   */
-  authenticate(identification, password) {
+  authenticate(credentials) {
+
     return new RSVP.Promise((resolve, reject) => {
       const { resourceName, identificationAttributeName } = this.getProperties('resourceName', 'identificationAttributeName');
       const data         = {};
-      data[resourceName] = { password };
-      data[resourceName][identificationAttributeName] = identification;
+      data[resourceName] = { password:credentials.password };
+      data[resourceName][identificationAttributeName] = credentials.identification;
 
       this._makeRequest(data).then(function(response) {
         run(null, resolve, response);
